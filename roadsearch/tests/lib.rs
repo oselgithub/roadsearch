@@ -1,6 +1,8 @@
 extern crate roadsearch;
 
+use roadsearch::map::Matrix;
 use roadsearch::map::Node;
+use roadsearch::map::RoadMap;
 
 #[test]
 fn parse_test() {
@@ -24,4 +26,14 @@ fn distance_test() {
   assert_eq!(0 as f32, node1.distance(&node1));
   assert_eq!(30 as f32, node1.distance(&node3));
   assert_eq!(40 as f32, node2.distance(&node3));
+}
+
+#[test]
+fn roadmap_test() {
+  let incidency = Matrix::new();
+  let map1 = RoadMap::new(&vec![
+    Node::new("Praha", 1, 160, 60),
+    Node::new("Brno", 2, 200, 30),
+    Node::new("Olomouc", 3, 160, 30)],
+    &incidency);
 }

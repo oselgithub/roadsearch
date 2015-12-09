@@ -3,13 +3,13 @@ pub mod map {
 #[derive(Debug,Clone,PartialEq)]
 pub struct Node {
   name: String,
-  id: i32,
+  id: u32,
   x: i32,
   y: i32,
 }
 
 impl Node {
-  pub fn new(name: &str, id: i32, x: i32, y: i32) -> Node {
+  pub fn new(name: &str, id: u32, x: i32, y: i32) -> Node {
     Node {
       name: name.to_string(),
       id: id,
@@ -21,7 +21,7 @@ impl Node {
   pub fn parse(line: &str) -> Node {
     let mut splited = line.split(", ");
     Node {
-      id: splited.next().unwrap().parse::< i32 >().unwrap(),
+      id: splited.next().unwrap().parse::< u32 >().unwrap(),
       x: splited.next().unwrap().parse::< i32 >().unwrap(),
       y: splited.next().unwrap().parse::< i32 >().unwrap(),
       name: splited.next().unwrap().to_string(),
@@ -40,24 +40,35 @@ impl Node {
 }
 
 use std::collections;
+pub type Matrix = collections::HashMap< u32, u32 >;
 
+#[derive(Debug,Clone)]
 pub struct RoadMap {
   nodes: Vec< Node >,
-  incidency_matrix: collections::HashMap< u32, u32 >,
+  incidency_matrix: Matrix,
 }
 
 impl RoadMap {
+  pub fn new(nodes: &Vec< Node >, incidency_matrix: &Matrix) -> RoadMap {
+    RoadMap {
+      nodes: nodes.clone(),
+      incidency_matrix: incidency_matrix.clone(),
+    }
+  }
+
   pub fn parse(file: &str) -> RoadMap {
     let empty = file.find("\n\n").unwrap() + 1;
     let lines = file.split_at(empty);
     let mut nodes: Vec< Node > = Vec::new();
-    let mut  incidency_matrix: collections::HashMap< u32, u32 > = collections::HashMap::new();
+    let mut  incidency_matrix: Matrix = Matrix::new();
     for line in lines.0.split("\n") {
       nodes.push(Node::parse(line));
     }
     for line in lines.1.split("\n") {
-      let record = line.split(", ");
-
+      let mut record = line.split(", ");
+      incidency_matrix.insert(
+        record.next().unwrap().parse::< u32 >().unwrap(),
+        record.next().unwrap().parse::< u32 >().unwrap());
     }
     RoadMap {
       nodes: nodes,
