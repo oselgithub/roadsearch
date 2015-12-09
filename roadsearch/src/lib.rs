@@ -42,7 +42,7 @@ impl Node {
 use std::collections;
 pub type Matrix = collections::HashMap< u32, u32 >;
 
-#[derive(Debug,Clone)]
+#[derive(Debug,Clone,PartialEq)]
 pub struct RoadMap {
   nodes: Vec< Node >,
   incidency_matrix: Matrix,

@@ -30,10 +30,15 @@ fn distance_test() {
 
 #[test]
 fn roadmap_test() {
-  let incidency = Matrix::new();
-  let map1 = RoadMap::new(&vec![
+  let mut incidency = Matrix::new();
+  incidency.insert(1, 2);
+  incidency.insert(1, 3);
+  incidency.insert(3, 2);
+  let expected = RoadMap::new(&vec![
     Node::new("Praha", 1, 160, 60),
     Node::new("Brno", 2, 200, 30),
     Node::new("Olomouc", 3, 160, 30)],
     &incidency);
+  let instance = RoadMap::parse("1, 160, 60, Praha\n2, 200, 30, Brno\n3, 160, 30, Olomouc\n\n1, 2, 65\n1, 3, 45\n3, 2, 88\n");
+  assert_eq!(expected, instance);
 }
