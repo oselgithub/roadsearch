@@ -66,10 +66,9 @@ impl RoadMap {
       nodes.push(Node::parse(line));
     }
     for line in edge_lines.split("\n") {
-      let mut record = line.split(", ");
-      incidency_matrix.insert(
-        record.next().unwrap().parse::< u32 >().unwrap(),
-        record.next().unwrap().parse::< u32 >().unwrap());
+      let splitted = line.split(", ").collect::< Vec< _ > >();
+      let mut record = splitted.iter().map(|&x| x.parse::< u32 >().unwrap());
+      incidency_matrix.insert(record.next().unwrap(), record.next().unwrap());
     }
     RoadMap {
       nodes: nodes,
