@@ -57,14 +57,15 @@ impl RoadMap {
   }
 
   pub fn parse(file: &str) -> RoadMap {
-    let empty = file.find("\n\n").unwrap() + 1;
-    let lines = file.split_at(empty);
+    let empty = file.find("\n\n").unwrap();
+    let node_lines = file.split_at(empty).0;
+    let edge_lines = file.split_at(empty + 2).1;
     let mut nodes: Vec< Node > = Vec::new();
     let mut  incidency_matrix: Matrix = Matrix::new();
-    for line in lines.0.split("\n") {
+    for line in node_lines.split("\n") {
       nodes.push(Node::parse(line));
     }
-    for line in lines.1.split("\n") {
+    for line in edge_lines.split("\n") {
       let mut record = line.split(", ");
       incidency_matrix.insert(
         record.next().unwrap().parse::< u32 >().unwrap(),

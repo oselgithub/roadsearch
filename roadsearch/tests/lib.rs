@@ -39,6 +39,7 @@ fn roadmap_test() {
     Node::new("Brno", 2, 200, 30),
     Node::new("Olomouc", 3, 160, 30)],
     &incidency);
-  let instance = RoadMap::parse("1, 160, 60, Praha\n2, 200, 30, Brno\n3, 160, 30, Olomouc\n\n1, 2, 65\n1, 3, 45\n3, 2, 88\n");
+  let instance = RoadMap::parse(
+    "1, 160, 60, Praha\n2, 200, 30, Brno\n3, 160, 30, Olomouc\n\n1, 2, 65\n1, 3, 45\n3, 2, 88");
   assert_eq!(expected, instance);
 }
