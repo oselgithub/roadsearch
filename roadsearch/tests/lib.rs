@@ -1,5 +1,6 @@
 extern crate roadsearch;
 
+use std::str::FromStr;
 use roadsearch::map::Matrix;
 use roadsearch::map::Node;
 use roadsearch::map::RoadMap;
@@ -7,14 +8,13 @@ use roadsearch::map::RoadMap;
 #[test]
 fn parse_test() {
   let expected = Node::new("Praha", 1, 150, 60);
-  let instance = Node::parse("1, 150, 60, Praha");
+  let instance = Node::from_str("1, 150, 60, Praha").unwrap();
   assert_eq!(expected, instance);
 }
 
 #[test]
-#[should_panic]
 fn parse_failed_test() {
-  Node::parse("Praha abc 60");
+  assert_eq!(true, Node::from_str("Praha abc 60").is_err());
 }
 
 #[test]
