@@ -111,27 +111,6 @@ impl RoadMap {
       incidency_matrix: incidency_matrix.clone(),
     }
   }
-
-  pub fn parse(file: &str) -> RoadMap {
-    let empty = file.find("\n\n").unwrap();
-    let node_lines = file.split_at(empty).0;
-    let edge_lines = file.split_at(empty + 2).1;
-    let mut nodes: Vec< Node > = Vec::new();
-    let mut  incidency_matrix: Matrix = Matrix::new();
-    for line in node_lines.split("\n") {
-      nodes.push(Node::from_str(line).unwrap());
-    }
-    for line in edge_lines.split("\n") {
-      match RoadMap::parse_edge(line) {
-      	Some(res) => incidency_matrix.insert(res.0, res.1),
-      	None => break
-      };
-    }
-    RoadMap {
-      nodes: nodes,
-      incidency_matrix: incidency_matrix,
-    }
-  }
   
   fn parse_edge(line: &str) -> Option< (u32, u32) > {
     let splitted = line.split(", ").collect::< Vec< _ > >();
@@ -144,6 +123,38 @@ impl RoadMap {
         None => None 
       },
       None => None
+    }
+  }
+  
+  fn parse_edges(edge_lines: &str) -> Matrix {
+    let mut  incidency_matrix: Matrix = Matrix::new();
+    for line in edge_lines.split("\n") {
+      match RoadMap::parse_edge(line) {
+      	Some(res) => incidency_matrix.insert(res.0, res.1),
+      	None => break
+      };
+    }
+    incidency_matrix
+  }
+  
+  fn parse_nodes(node_lines: &str) -> Result< Vec< Node >, LibError > {
+    let mut nodes: Vec< Node > = Vec::new();
+    for line in node_lines.split("\n") {
+      nodes.push(try!(Node::from_str(line)));
+    }
+    Ok(nodes)
+  }
+}
+
+impl FromStr for RoadMap {
+  type Err = LibError;
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    match s.find("\n\n") {
+      Some(empty) => Ok::<Self, Self::Err>(RoadMap {
+          nodes: try!(RoadMap::parse_nodes(s.split_at(empty).0)),
+          incidency_matrix: RoadMap::parse_edges(s.split_at(empty + 2).1),
+        }),
+      None => Err(LibError::EntryMissing)
     }
   }
 }
