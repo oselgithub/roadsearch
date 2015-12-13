@@ -112,29 +112,29 @@ impl RoadMap {
     }
   }
   
-  fn parse_edge(line: &str) -> Option< (u32, u32) > {
+  fn parse_edge(line: &str) -> Result< Option< (u32, u32) >, LibError > {
     let splitted = line.split(", ").collect::< Vec< _ > >();
-    let mut record = splitted.iter().map(|&x| x.parse::< u32 >().unwrap());
+    let mut record = splitted.iter().map(|&x| x.parse::< u32 >());
     let from = record.next();
     let to = record.next();
     match from {
       Some(x) => match to {
-        Some(y) =>Some((x, y)),
-        None => None 
+        Some(y) => Ok(Some((try!(x), try!(y)))),
+        None => Ok(None) 
       },
-      None => None
+      None => Ok(None)
     }
   }
   
-  fn parse_edges(edge_lines: &str) -> Matrix {
+  fn parse_edges(edge_lines: &str) -> Result< Matrix, LibError > {
     let mut  incidency_matrix: Matrix = Matrix::new();
     for line in edge_lines.split("\n") {
-      match RoadMap::parse_edge(line) {
+      match try!(RoadMap::parse_edge(line)) {
       	Some(res) => incidency_matrix.insert(res.0, res.1),
       	None => break
       };
     }
-    incidency_matrix
+    Ok(incidency_matrix)
   }
   
   fn parse_nodes(node_lines: &str) -> Result< Vec< Node >, LibError > {
@@ -152,7 +152,7 @@ impl FromStr for RoadMap {
     match s.find("\n\n") {
       Some(empty) => Ok::<Self, Self::Err>(RoadMap {
           nodes: try!(RoadMap::parse_nodes(s.split_at(empty).0)),
-          incidency_matrix: RoadMap::parse_edges(s.split_at(empty + 2).1),
+          incidency_matrix: try!(RoadMap::parse_edges(s.split_at(empty + 2).1)),
         }),
       None => Err(LibError::EntryMissing)
     }

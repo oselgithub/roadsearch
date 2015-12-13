@@ -43,3 +43,13 @@ fn roadmap_test() {
     "1, 160, 60, Praha\n2, 200, 30, Brno\n3, 160, 30, Olomouc\n\n1, 2, 65\n1, 3, 45\n3, 2, 88");
   assert_eq!(expected, instance.unwrap());
 }
+
+#[test]
+fn roadmap_failed_test() {
+  let instance1 = RoadMap::from_str(
+    "1, abc, 60, Praha\n2, 200, 30, Brno\n3, 160, 30, Olomouc\n\n1, 2, 65\n1, 3, 45\n3, 2, 88");
+  assert_eq!(true, instance1.is_err());
+  let instance2 = RoadMap::from_str(
+    "1, 160, 60, Praha\n2, 200, 30, Brno\n3, 160, 30, Olomouc\n\n1, 2, 65\n1, xyz, 45\n3, 2, 88");
+  assert_eq!(true, instance2.is_err());
+}
