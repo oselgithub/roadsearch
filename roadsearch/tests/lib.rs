@@ -1,9 +1,7 @@
 extern crate roadsearch;
 
 use std::str::FromStr;
-use roadsearch::map::Matrix;
-use roadsearch::map::Node;
-use roadsearch::map::RoadMap;
+use roadsearch::map::{Matrix, Node, RoadMap};
 
 #[test]
 fn parse_test() {
