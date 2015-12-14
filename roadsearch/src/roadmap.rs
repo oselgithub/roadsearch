@@ -20,21 +20,18 @@ impl RoadMap {
       incidency_matrix: incidency_matrix.clone(),
     }
   }
-  
+
   fn parse_edge(line: &str) -> Result< Option< (u32, u32) >, LibError > {
     let splitted = line.split(", ").collect::< Vec< _ > >();
     let mut record = splitted.iter().map(|&x| x.parse::< u32 >());
     let from = record.next();
     let to = record.next();
-    match from {
-      Some(x) => match to {
-        Some(y) => Ok(Some((try!(x), try!(y)))),
-        None => Ok(None) 
-      },
-      None => Ok(None)
+    match (from, to) {
+      (Some(x), Some(y)) => Ok(Some((try!(x), try!(y)))),
+      _ => Ok(None)
     }
   }
-  
+
   fn parse_edges(edge_lines: &str) -> Result< Matrix, LibError > {
     let mut  incidency_matrix: Matrix = Matrix::new();
     for line in edge_lines.split("\n") {
@@ -45,7 +42,7 @@ impl RoadMap {
     }
     Ok(incidency_matrix)
   }
-  
+
   fn parse_nodes(node_lines: &str) -> Result< Vec< Node >, LibError > {
     let mut nodes: Vec< Node > = Vec::new();
     for line in node_lines.split("\n") {
