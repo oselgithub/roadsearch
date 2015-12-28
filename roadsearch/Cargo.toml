@@ -1,14 +1,16 @@
 [package]
 
-name = "hello_world"
+name = "pathsearch"
 version = "0.0.1"
-authors = [ "Your name <you@example.com>" ]
+authors = [ "Osel <oselgithub@seznam.cz>" ]
 
 [[bin]]
-
 name = "pathfinder"
 path = "src/main.rs"
 
 [lib]
 name = "roadsearch"
 path = "src/lib.rs"
+
+[dependencies]
+getopts = "*"

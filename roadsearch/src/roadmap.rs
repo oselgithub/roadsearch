@@ -20,13 +20,15 @@ impl RoadMap {
       incidency_matrix: incidency_matrix.clone(),
     }
   }
+  
+  pub fn print_path(self, start: &str, destination: &str)  {
+    //TODO A* to find path
+  }
 
   fn parse_edge(line: &str) -> Result< Option< (u32, u32) >, LibError > {
     let splitted = line.split(", ").collect::< Vec< _ > >();
     let mut record = splitted.iter().map(|&x| x.parse::< u32 >());
-    let from = record.next();
-    let to = record.next();
-    match (from, to) {
+    match (record.next(), record.next()) {
       (Some(x), Some(y)) => Ok(Some((try!(x), try!(y)))),
       _ => Ok(None)
     }
