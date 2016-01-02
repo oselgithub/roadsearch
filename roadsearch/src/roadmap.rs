@@ -21,7 +21,7 @@ impl RoadMap {
     }
   }
   
-  pub fn print_path(self, start: &str, destination: &str)  {
+  pub fn print_path(&self, start: &str, destination: &str)  {
     //TODO A* to find path
   }
 
